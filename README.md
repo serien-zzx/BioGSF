@@ -14,6 +14,7 @@ pytorch >= 1.7
 ```
 
 # Training
+We provide the contents of the training script file as follows, through which you can perform the relevant experiments：
 ```
 BERT_DIR='BERT_DIR'
 
@@ -44,6 +45,7 @@ python ./re_main.py  \
              --save_model=True\
 ```
 # Predicate
+This section has scripts for predictions:
 ```
 BERT_DIR='BERT_DIR'
 
