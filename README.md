@@ -3,7 +3,7 @@
 This project is a medical entity relationship extraction model. You can view related articles from the following address: BioGSF: A Graph-Driven Semantic Feature Integration Framework for Biomedical Relation Extraction.
 
 # Dataset
-You can get from [MKG-GC](https://github.com/KeDaCoYa/MKG-GC?tab=readme-ov-file#requirements) and [BioRED](https://ftp.ncbi.nlm.nih.gov/pub/lu/BioRED/).
+Due to copyright related issues， you can get from [MKG-GC](https://github.com/KeDaCoYa/MKG-GC?tab=readme-ov-file#requirements) and [BioRED](https://ftp.ncbi.nlm.nih.gov/pub/lu/BioRED/).
 
 # Requirements
 ```
