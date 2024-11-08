@@ -7,48 +7,6 @@ import os
 
 
 
-
-def handle_ent(doc,e):
-    token_text = []
-    flag1=False
-    left_neighbor = None
-    right_neighbor = None
-    site=-1
-    for token in doc:
-        if token.text == e or e in token.text:
-            # left_neighbor = token.nbor(-1) if token.i > 0 else None
-            # right_neighbor = token.nbor(1) if token.i < len(doc) - 1 else None
-            # if left_neighbor!=None :
-            #     token_text.append(left_neighbor.text)
-            # if right_neighbor!=None:
-            #     token_text.append(right_neighbor.text)
-            if token.head.text in token_text:
-                continue
-            token_text.append(token.head.text)
-            return token_text
-    div_text = word_tokenize(e)
-    if 'N(5)-' in e and 'H(4)' in e:
-        site = e.find('H(4)')
-        div_text = [e[:site-1],e[site:]]
-    if e =='[5-14C]DFMO':
-        div_text = ['[5','-','14C]DFMO']
-
-    for token in doc:
-        if token.text in div_text or token.text in div_text[0]:
-
-            # left_neighbor = token.nbor(-1) if token.i > 0 else None
-            # right_neighbor = token.nbor(1) if token.i < len(doc) - 1 else None
-            # if left_neighbor!=None:
-            #     token_text.append(left_neighbor.text)
-            # if right_neighbor!=None:
-            #     token_text.append(right_neighbor.text)
-            if token.head.text in token_text:
-                continue
-            token_text.append(token.head.text)
-            # return token_text
-    
-    return token_text
-
 def dropout_title(text):
     sentence = text
     all_title = ['[s1]','[e1]','[s2]','[e2]']
@@ -107,7 +65,7 @@ def has_problem(sentences):
     return False
 
 def main(data,save_type):
-
+    relations = set()
     nlp = spacy.load("en_core_sci_lg")
     label_text_4 = []
     all_title = ['s1','e1','s2','e2']
@@ -118,11 +76,12 @@ def main(data,save_type):
         e1_neg = []
         e2_neg = []
         site2idx = {}
-        sentence,e1,e2,e1_type,e2_type,rel,distance = sentences.split('\t')
+        sentence,e1,e2,e1_type,e2_type,rel = sentences.split('\t')
         e1_child = {'text':e1,'idx':[],'ent_type':'e1','children':[],'head':[]}
         e2_child = {'text':e2,'idx':[],'ent_type':'e2','children':[],'head':[]}
         flag = has_problem(sentence)
         rel=rel.strip()
+        relations.add(rel)
         raw_text = dropout_title(sentence)
         raw_text = " ".join(word_tokenize(raw_text))
         doc1 = nlp(sentence)
@@ -251,15 +210,21 @@ def main(data,save_type):
     os.makedirs("neg_mid_dataset/{}/".format(save_type),exist_ok=True)
     with open('neg_mid_dataset/{}/normal_{}.txt'.format(save_type,save_type),'w') as f:
         f.writelines(''.join(label_text_4))
+    if save_type == 'train':
+        with open('neg_mid_dataset/labels.txt','w') as f:
+            for item in relations:
+                f.write(item+"\n")
         
-def get_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--data_path", default=None, type=str, required=True)
-    args = parser.parse_args()
+# def get_args():
+#     parser = argparse.ArgumentParser()
+#     parser.add_argument("--data_path", default=None, type=str, required=True)
+#     args = parser.parse_args()
 
 if __name__ == '__main__':
-    args = get_args()
-    for flag in ["train","dev"]:
-        with open('{}/{}.txt'.format(args.data_path,flag),'r') as f:
+    # args = get_args()
+    for flag in ["train","dev","test"]:
+        print("{} Dataset is making".format(flag))
+        with open('{}.txt'.format(flag),'r') as f:
             data = f.readlines()
         main(data,flag)
+        print("{} Dataset is Done".format(flag))
