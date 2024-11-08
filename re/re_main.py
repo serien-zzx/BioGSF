@@ -105,7 +105,7 @@ def train(config=None, logger=None):
         all_predicate_tokens = []
 
         model.train()
-        for step, batch_data in tqdm(enumerate(train_dataloader),total=len(train_dataloader),desc="数据集:{},{}_{}....".format(config.dataset_name,config.bert_name,config.model_name)):
+        for step, batch_data in tqdm(enumerate(train_dataloader),total=len(train_dataloader),desc="Dataset:{},{}_{}....".format(config.dataset_name,config.bert_name,config.model_name)):
 
             if config.data_format == 'single':
                 if 'gcn' in config.model_name or 'gat' in config.model_name:
@@ -196,12 +196,12 @@ def train(config=None, logger=None):
                      0.00, config.evaluate_mode, type_='train', scheme=1)
 
             reports = classification_report(all_train_labels, all_predicate_tokens, labels=all_labels,digits=4)
-            logger.info("-------训练集epoch:{} 报告----------".format(epoch))
+            logger.info("-------Training Set epoch:{} Report----------".format(epoch))
             logger.info(reports)
 
         dev_p, dev_r, dev_f1 = dev(model, config, tokenizer, label2id, device, epoch=epoch, global_step=global_step,
                                    logger=logger,type_='dev')
-        
+        # If YOUR DATA SET NEED TO TEST,PUT HERE
         if config.dataset_name in ['ChemProt']:
             test_p, test_r, test_f1 = dev(model, config, tokenizer, label2id, device, epoch=epoch, global_step=global_step,
                                        logger=logger,type_='test')
@@ -213,32 +213,10 @@ def train(config=None, logger=None):
             if config.save_model:
                 best_model = copy.deepcopy(model)
         if config.save_model:
-            logger.info("正在保存模型----------")
+            logger.info("Saving Model----------")
             save_model(config, model, epoch=epoch, mode='other')
-        # if (
-        #         epoch >= 3 and train_f1 - dev_f1 > config.over_fitting_rate) or best_epoch - epoch >= config.over_fitting_epoch:  # 如果训练集的f1超过验证集9个百分点，自动停止
-        #     logger.info('.............过拟合，提前停止训练...............')
-        #     logger.info(
-        #         '{}任务中{}模型下，在第{}epoch中，最佳的是{}-f1:{:.5f},{}-p:{:.5f},{}-r:{:.5f},将模型存储在{}'.format(config.dataset_name,
-        #                                                                                          config.model_name,
-        #                                                                                          best_epoch,
-        #                                                                                          config.evaluate_mode,
-        #                                                                                          best_f1,
-        #                                                                                          config.evaluate_mode,
-        #                                                                                          best_p,
-        #                                                                                          config.evaluate_mode,
-        #                                                                                          best_r,
-        #                                                                                          config.output_dir))
-        #     if config.save_model:
-        #         save_model(config, best_model, mode='best_model')
-        #     if config.summary_writer:
-        #         metric_writer.close()
-        #
-        #     logger.info('----------------本次模型运行的参数------------------')
-        #     print_hyperparameters(config, logger)
-        #     return
 
-    logger.info('{}任务中{}模型下，在第{}epoch中，最佳的是{}-f1:{:.5f},{}-p:{:.5f},{}-r:{:.5f},将模型存储在{}'.format(config.dataset_name,
+    logger.info('{}Task{}Model，in{}epoch，the best{}-f1:{:.5f},{}-p:{:.5f},{}-r:{:.5f}.This Model will save in {}'.format(config.dataset_name,
                                                                                                  config.model_name,
                                                                                                  best_epoch,
                                                                                                  config.evaluate_mode,
@@ -255,7 +233,7 @@ def train(config=None, logger=None):
         metric_writer.close()
     if config.use_parameter_summary_writer:
         parameter_writer.close()
-    logger.info('----------------本次模型运行的参数------------------')
+    logger.info('----------------Parameters for this model run------------------')
     print_hyperparameters(config, logger)
     # Optional
 
@@ -263,7 +241,6 @@ def train(config=None, logger=None):
 if __name__ == '__main__':
     config = get_bert_config()
 
-    # 设置时间
     now = datetime.datetime.now()
     diff = datetime.timedelta(hours=8)
     now = now + diff
@@ -288,7 +265,7 @@ if __name__ == '__main__':
     config.logs_dir = './outputs/logs/{}/{}/{}/{}/'.format(str(datetime.date.today()), wandb_name,config.model_name, config.dataset_name)
     logger = get_logger(config)
     if config.run_type == 'normal':
-        logger.info('----------------本次模型运行的参数--------------------')
+        logger.info('----------------Parameters for this model run--------------------')
         print_hyperparameters(config, logger)
         train(config, logger)
     else:
