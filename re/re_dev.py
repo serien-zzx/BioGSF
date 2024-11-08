@@ -66,7 +66,7 @@ def dev(model, config, tokenizer, label2id, device, ckpt_path=None, epoch=None, 
     model.eval()
     with torch.no_grad():
         for step, batch_data in tqdm(enumerate(dev_dataloader), total=len(dev_dataloader),
-                                     desc="{}数据集正在进行评估".format(type_)):
+                                     desc="{}DataSet正在进行评估".format(type_)):
 
             if config.data_format == 'single':
                 if 'gcn' in config.model_name or 'gat' in config.model_name:
@@ -101,9 +101,6 @@ def dev(model, config, tokenizer, label2id, device, ckpt_path=None, epoch=None, 
 
             all_dev_labels.extend(labels)
             all_dev_tokens.extend(predicate_token)
-            
-            # logger.info("-----------labels:{} 报告-----------".format(labels))
-            # logger.info("--predicate_token:{} 报告-----------".format(predicate_token))
 
 
             p_r_f1_s = precision_recall_fscore_support(labels, predicate_token, labels=all_labels,
@@ -140,9 +137,9 @@ def dev(model, config, tokenizer, label2id, device, ckpt_path=None, epoch=None, 
                   evaluate_mode=config.evaluate_mode, type_=type_)
     reports = classification_report(all_dev_labels, all_dev_tokens, labels=all_labels, digits=4)
     if type_ == 'dev':
-        logger.info("-----------验证集epoch:{} 报告-----------".format(epoch))
+        logger.info("-----------Dev Setepoch:{} 报告-----------".format(epoch))
     else:
-        logger.info("-----------测试集epoch:{} 报告-----------".format(epoch))
+        logger.info("-----------Test Setepoch:{} 报告-----------".format(epoch))
     logger.info(reports)
 
     return dev_p, dev_r, dev_f1
@@ -163,7 +160,7 @@ if __name__ == '__main__':
 
     logger = get_logger(config)
 
-    logger.info('----------------本次模型运行的参数--------------------')
+    logger.info('----------------Parameters for this model run--------------------')
     print_hyperparameters(config, logger)
     ckpt_path = ''
     device = torch.device('cuda:{}'.format(config.gpu_id)) if config.use_gpu else torch.device('cpu')
