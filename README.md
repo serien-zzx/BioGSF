@@ -32,6 +32,9 @@ pip -r requirements.txt
 ```
 Now that you have configured the relevant environment, you still need to go to [ScispaCy](https://github.com/allenai/scispacy) and download the relevant files, which we use `en_core_sci_lg`.
 
+# Pre-Training
+We've saved the weights obtained by training the model on both datasets [here](https://huggingface.co/Serien/BioGSF), and you can just go ahead and download our pre-trained weights to make predictions.
+
 # Data preparation
 You can go to [here](https://github.com/serien-zzx/BioGSF/tree/main/re/original_dataset/Your_Dataset) to complete the relevant data preparation and we have put the relevant instructions there.
 
