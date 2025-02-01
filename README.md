@@ -1,6 +1,6 @@
 # BioGSF: A Graph-Driven Semantic Feature Integration Framework for Biomedical Relation Extraction
 
-This project is a medical entity relationship extraction model. You can view related articles from the following address: BioGSF: A Graph-Driven Semantic Feature Integration Framework for Biomedical Relation Extraction.
+This project is a medical entity relationship extraction model. You can view related articles from the following address: [BioGSF: A Graph-Driven Semantic Feature Integration Framework for Biomedical Relation Extraction](https://pmc.ncbi.nlm.nih.gov/articles/PMC11759886/).
 
 # Overview
 The automatic and accurate extraction of diverse biomedical relations from literature constitutes the core elements of medical knowledge graphs, which are indispensable for healthcare artificial intelligence. Currently, fine-tuning through stacking various neural networks on pre-trained language models (PLMs) represents a common framework for end-to-end resolution of the biomedical relation extraction (RE) problem. Nevertheless, sequence-based PLMs, to a certain extent, fail to fully exploit the connections between semantics and the topological features formed by these connections. 
